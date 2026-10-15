@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ClubsModule } from './clubs/clubs.module';
@@ -18,6 +19,8 @@ import { buildTypeOrmOptions } from './database/typeorm.config';
     ConfigModule.forRoot({ isGlobal: true }),
     // Подключение к PostgreSQL (настройки берутся из .env)
     TypeOrmModule.forRootAsync({ useFactory: () => buildTypeOrmOptions() }),
+    // Планировщик фоновых задач (снятие неоплаченных броней)
+    ScheduleModule.forRoot(),
     AuthModule,
     ClubsModule,
     BookingsModule,

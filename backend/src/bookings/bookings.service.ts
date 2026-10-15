@@ -11,6 +11,7 @@ import { OccupancyService } from '../clubs/occupancy.service';
 import { AppException, badRequest, conflict, notFound } from '../common/errors/app.exception';
 import { addHoursToDate, fitsWorkingHours, toInstant } from '../common/time/astana-time';
 import { User } from '../users/user.entity';
+import { BookingExpiryService } from './booking-expiry.service';
 import { generateBookingId } from './booking-id';
 import { BOOKING_RELATIONS, toBookingDto } from './booking.mapper';
 import { CreateBookingDto } from './dto/create-booking.dto';
@@ -29,6 +30,7 @@ export class BookingsService {
     @InjectDataSource() private readonly ds: DataSource,
     @InjectRepository(Booking) private readonly bookings: Repository<Booking>,
     private readonly occupancy: OccupancyService,
+    private readonly expiry: BookingExpiryService,
     config: ConfigService,
   ) {
     this.holdMinutes = Number(config.get('BOOKING_HOLD_MINUTES', 10));
@@ -53,6 +55,9 @@ export class BookingsService {
   }
 
   private async createInTx(em: EntityManager, user: User, dto: CreateBookingDto): Promise<string> {
+    // 0. Сначала освобождаем места просроченных неоплаченных броней
+    await this.expiry.expireStale(em);
+
     // 1. Клуб, зона, тариф — существуют и связаны между собой
     const club = await em.findOneBy(Club, { id: dto.clubId });
     if (!club) throw notFound('CLUB_NOT_FOUND', 'Клуб не найден');
