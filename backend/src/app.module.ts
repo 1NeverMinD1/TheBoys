@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ClubsModule } from './clubs/clubs.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { buildTypeOrmOptions } from './database/typeorm.config';
 
@@ -26,6 +27,7 @@ import { buildTypeOrmOptions } from './database/typeorm.config';
     ClubsModule,
     BookingsModule,
     ReviewsModule,
+    AdminModule,
   ],
   controllers: [AppController],
 })
