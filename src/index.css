@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-neutral-950 text-neutral-100 antialiased;
+}
+
+.leaflet-container {
+  font-family: inherit;
+  background: #171717;
+}
+
+.leaflet-control-attribution {
+  background: rgba(10, 10, 10, 0.75) !important;
+  color: #737373 !important;
+}
+
+.leaflet-control-attribution a {
+  color: #a78bfa !important;
+}
+
+.leaflet-bar a {
+  background: #171717 !important;
+  color: #e5e5e5 !important;
+  border-color: #262626 !important;
+}
+
+.leaflet-bar a:hover {
+  background: #262626 !important;
+}
+
+.leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%)
+    saturate(60%);
+}
