@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ClubsModule } from './clubs/clubs.module';
+import { BookingsModule } from './bookings/bookings.module';
 import { AppController } from './app.controller';
 import { buildTypeOrmOptions } from './database/typeorm.config';
 
@@ -19,6 +20,7 @@ import { buildTypeOrmOptions } from './database/typeorm.config';
     TypeOrmModule.forRootAsync({ useFactory: () => buildTypeOrmOptions() }),
     AuthModule,
     ClubsModule,
+    BookingsModule,
   ],
   controllers: [AppController],
 })
