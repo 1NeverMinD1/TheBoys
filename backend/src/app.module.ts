@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { ClubsModule } from './clubs/clubs.module';
 import { AppController } from './app.controller';
 import { buildTypeOrmOptions } from './database/typeorm.config';
@@ -16,6 +17,7 @@ import { buildTypeOrmOptions } from './database/typeorm.config';
     ConfigModule.forRoot({ isGlobal: true }),
     // Подключение к PostgreSQL (настройки берутся из .env)
     TypeOrmModule.forRootAsync({ useFactory: () => buildTypeOrmOptions() }),
+    AuthModule,
     ClubsModule,
   ],
   controllers: [AppController],
