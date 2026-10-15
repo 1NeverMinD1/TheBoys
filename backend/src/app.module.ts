@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
+import { buildTypeOrmOptions } from './database/typeorm.config';
 
 /**
  * Корневой модуль: собирает всё приложение.
@@ -11,6 +13,8 @@ import { AppController } from './app.controller';
   imports: [
     // Читает .env и делает переменные доступными через ConfigService
     ConfigModule.forRoot({ isGlobal: true }),
+    // Подключение к PostgreSQL (настройки берутся из .env)
+    TypeOrmModule.forRootAsync({ useFactory: () => buildTypeOrmOptions() }),
   ],
   controllers: [AppController],
 })
