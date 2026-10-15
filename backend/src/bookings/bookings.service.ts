@@ -10,6 +10,7 @@ import { Zone } from '../clubs/entities/zone.entity';
 import { OccupancyService } from '../clubs/occupancy.service';
 import { AppException, badRequest, conflict, notFound } from '../common/errors/app.exception';
 import { addHoursToDate, fitsWorkingHours, toInstant } from '../common/time/astana-time';
+import { RefundService } from '../payments/refund.service';
 import { User } from '../users/user.entity';
 import { BookingExpiryService } from './booking-expiry.service';
 import { generateBookingId } from './booking-id';
@@ -31,6 +32,7 @@ export class BookingsService {
     @InjectRepository(Booking) private readonly bookings: Repository<Booking>,
     private readonly occupancy: OccupancyService,
     private readonly expiry: BookingExpiryService,
+    private readonly refunds: RefundService,
     config: ConfigService,
   ) {
     this.holdMinutes = Number(config.get('BOOKING_HOLD_MINUTES', 10));
@@ -234,6 +236,8 @@ export class BookingsService {
     }
     await em.update(Booking, booking.id, { status: 'cancelled', cancelledAt: new Date(), expiresAt: null });
     await em.update(BookingSeat, { bookingId: booking.id }, { isActive: false });
+    // Если бронь была оплачена — возвращаем деньги
+    await this.refunds.refundForBooking(em, booking.id);
   }
 
   /** Читает бронь с блокировкой строки — чтобы оплата и отмена не столкнулись */
