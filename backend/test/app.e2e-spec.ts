@@ -84,7 +84,7 @@ describe('The Boys API (e2e)', () => {
         minPricePerHour: 800,
         seatsTotal: 45,
         seatsFree: 20, // 12 + 3 + 5, как в моках
-        topGpu: 'RTX 4080 Super',
+        topGpu: 'RTX 4070 Ti Super',
         maxRefreshRateHz: 380,
         is24h: true,
       });
@@ -128,7 +128,7 @@ describe('The Boys API (e2e)', () => {
       expect(reg.body.user).toMatchObject({ email: 'new@mail.kz', role: 'player', phone: '+77001234567' });
       expect(reg.body.user.passwordHash).toBeUndefined();
 
-      await http.post('/auth/register').send({ email: 'new@mail.kz', password: 'password123', name: 'X' }).expect(409);
+      await http.post('/auth/register').send({ email: 'new@mail.kz', password: 'password123', name: 'Дубль' }).expect(409);
       const bad = await http.post('/auth/login').send({ email: 'new@mail.kz', password: 'wrong-pass' }).expect(401);
       expect(bad.body.code).toBe('INVALID_CREDENTIALS');
 
